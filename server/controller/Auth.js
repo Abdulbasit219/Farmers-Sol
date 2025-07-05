@@ -1,17 +1,5 @@
-import { hashedPassword } from "../helper/bcrypt.js";
+import { hashedPassword } from "../helper/bcrypt_helper.js";
 import userModel from "../models/AuthSchema.js";
-
-//pending
-const loginController = async (req, res) => {
-  try {
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      success: false,
-      message: "Error in LoginController",
-    });
-  }
-};
 
 const registerationController = async (req, res) => {
   try {
@@ -56,5 +44,18 @@ const registerationController = async (req, res) => {
     });
   }
 };
+
+//pending
+const loginController = async (req, res) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      success: false,
+      message: "Error in LoginController",
+    });
+  }
+};
+
 
 export { loginController, registerationController };
