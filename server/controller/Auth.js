@@ -42,13 +42,12 @@ const registerationController = async (req, res) => {
       role,
       isAdmin,
     }).save();
-    
+
     res.status(201).send({
       success: true,
       message: "User Register successfully",
       user,
     });
-
   } catch (error) {
     console.log(err);
     res.status(500).send({
