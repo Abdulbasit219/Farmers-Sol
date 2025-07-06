@@ -2,9 +2,16 @@ import Products from "../models/ProductSchema.js";
 
 const createProducts = async (req, res) => {
   try {
-    const { title, description, price, quantity } = req.body;
+    if (req.user.role !== "farmer") {
+      return res.status(403).json({
+        success: false,
+        message: "Only farmers are allowed to create products.",
+      });
+    }
 
-    if (!title || !price) {
+    const { title, description, price, quantity, category } = req.body;
+
+    if (!title || !price || !category) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
@@ -15,8 +22,9 @@ const createProducts = async (req, res) => {
       description,
       price,
       quantity,
+      category,
       imageUrl: imagePaths,
-      createdBy: req.userId,
+      createdBy: req.user._id,
     });
 
     await products.save();

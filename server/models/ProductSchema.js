@@ -20,6 +20,11 @@ const productSchema = new mongoose.Schema(
     imageUrl: {
       type: [String],
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'farmerCategory',
+      required: true,
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "FarmSol", 
