@@ -10,7 +10,7 @@ const ensureAuthenticated = (req, res, next) => {
   const auth = req.cookies.token;
   try {
     const decoded = jwt.verify(auth, process.env.SECRET_KEY);
-    req.user = decoded;
+    req.userId = decoded._id;
     next();
   } catch (error) {
     return res.status(403).send({
