@@ -3,7 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./connection/DB.js";
 import routes from "./routes/AuthRoute.js";
+import ProductsRoute from "./routes/ProductRoute.js"
 import cookieParser from "cookie-parser";
+import CategoryRoute from "./routes/CategoryRoutes.js"
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(cookieParser());
 const port = process.env.PORT;
 
 app.use("/api/v1/auth", routes);
+app.use("/api/v1/products", ProductsRoute)
+app.use("/api/v1/category", CategoryRoute)
 
 app.listen(port, () => {
   console.log(`APP listening on port ${port}`);
