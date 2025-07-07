@@ -3,7 +3,7 @@ import Navbar from "../components/ui/Navbar";
 import Hero from "../features/Hero/Hero";
 import OurServices from "../features/Services/OurServices";
 import HowItWorks from "../features/HowItWorks/HowItWorks";
-import About from "../features/About/about";
+import About from "../features/About/About";
 import FAQSection from "../features/FAQ/FAQSection";
 
 function Home() {
