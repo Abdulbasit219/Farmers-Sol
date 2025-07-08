@@ -1,4 +1,4 @@
-import Products from "../models/ProductSchema.js";
+import productModel from "../models/ProductSchema.js";
 
 const createProducts = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ const createProducts = async (req, res) => {
 
     const imagePaths = req.files ? req.files.map((file) => file.path) : [];
 
-    const products = new Products({
+    const products = new productModel({
       title,
       description,
       price,
@@ -41,4 +41,41 @@ const createProducts = async (req, res) => {
   }
 };
 
-export { createProducts };
+const deleteProducts = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // const products = await productModel.findByIdAndDelete(productId);
+    const product = await productModel.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // ✅ Allow only the farmer who created the product
+    if (product.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this product",
+      });
+    }
+
+    await productModel.findByIdAndDelete(productId);
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while deleting product",
+    });
+  }
+};
+
+export { createProducts, deleteProducts };
