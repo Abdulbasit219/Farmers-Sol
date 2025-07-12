@@ -55,7 +55,6 @@ const deleteProducts = async (req, res) => {
       });
     }
 
-    // ✅ Allow only the farmer who created the product
     if (product.createdBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -78,4 +77,97 @@ const deleteProducts = async (req, res) => {
   }
 };
 
-export { createProducts, deleteProducts };
+const getProducts = async (req, res) => {
+  try {
+    const products = await productModel.find();
+
+    res.status(200).json({
+      success: true,
+      totalProducts: products.length,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while getting product",
+    });
+  }
+};
+
+//pending
+const updateProduct = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while updating product",
+    });
+  }
+};
+
+const getProductsbyFarmerId = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const products = await productModel.find({createdBy: id});
+
+     if (!products) {
+      return res.status(404).json({
+        success: false,
+        message: "No products found for this farmer",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "products fetch successfully",
+      products
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while get products by id",
+    });
+  }
+};
+
+const getProductsByCategory = async (req,res) => {
+  try {
+    const {id} = req.params;
+
+    const products = await productModel.find({category: id});
+
+    if(!products){
+      return res.status(404).json({
+        success: false,
+        message: "No products founds from this category"
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "successfully Products fetch",
+      products  
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while get products by id",
+    });
+  }
+}
+
+export {
+  createProducts,
+  deleteProducts,
+  updateProduct,
+  getProducts,
+  getProductsbyFarmerId,
+  getProductsByCategory
+};
