@@ -2,6 +2,7 @@ import React from "react";
 import FarmerBuyer from "../../assets/hero-img.png";
 import bgHero from "../../assets/bgHero.png";
 import Button from "../../components/ui/Button";
+import { HashLink as Link } from "react-router-hash-link";
 
 function Hero() {
   return (
@@ -21,12 +22,16 @@ function Hero() {
           </p>
 
           <div className="flex flex-col xs:flex-row gap-4">
+         <Link to="/login">
             <Button className="bg-[#D8F3DC] text-[#2D6A4F] hover:bg-white hover:cursor-pointer">
               Get Started
             </Button>
-            <Button className="border border-white text-white hover:bg-white hover:text-[#2D6A4F] hover:cursor-pointer">
-              Learn More
-            </Button>
+         </Link>
+            <Link smooth to="/#about">
+              <Button className="border border-white text-white hover:bg-white hover:text-[#2D6A4F] hover:cursor-pointer">
+                Learn More
+              </Button>
+            </Link>
           </div>
         </div>
 

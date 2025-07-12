@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../../assets/sabzlink white.png";
 import { Menu } from "lucide-react";
+import { HashLink as Link } from "react-router-hash-link";
 
 function Navbar() {
   return (
@@ -8,28 +9,48 @@ function Navbar() {
       <div className="max-w-[1370px] mx-auto px-4 h-[70px] flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-[170px] object-contain"
-          />
+          <img src={Logo} alt="Logo" className="h-[170px] object-contain" />
         </div>
-
-        {/* Menu Items (Desktop) */}
-        <ul className="hidden lg:flex space-x-8 text-white font-medium">
-          <li className="hover:text-[#D8F3DC] cursor-pointer">Home</li>
-          <li className="hover:text-[#D8F3DC] cursor-pointer">About</li>
-          <li className="hover:text-[#D8F3DC] cursor-pointer">How It Works</li>
-          <li className="hover:text-[#D8F3DC] cursor-pointer">For Farmers</li>
-          <li className="hover:text-[#D8F3DC] cursor-pointer">For Buyers</li>
-          <li className="hover:text-[#D8F3DC] cursor-pointer">Contact</li>
+        <ul className="hidden lg:flex space-x-8 text-white font-medium cursor-pointer">
+          <li className="hover:text-[#D8F3DC]">
+            <Link  smooth to="/" >
+              Home
+            </Link>
+          </li>
+          <li className="hover:text-[#D8F3DC]">
+            <Link smooth to="/#about">
+              About
+            </Link>
+          </li>
+          <li className="hover:text-[#D8F3DC]">
+            <Link smooth to="/#how-it-works">
+              How It Works
+            </Link>
+          </li>
+           <li>
+            <Link to="/farmers" className="hover:text-[#D8F3DC]">
+              For Farmers
+            </Link>
+          </li>
+          <li>
+            <Link to="/buyers" className="hover:text-[#D8F3DC]">
+              For Buyers
+            </Link>
+          </li>
+          <li className="hover:text-[#D8F3DC]">
+            <Link smooth to="/#contact">
+              Contact
+            </Link>
+          </li>
         </ul>
 
-        {/* CTA Button (Desktop) */}
         <div className="hidden lg:block">
-          <button className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200">
-            Login / Signup
-          </button>
+          <Link
+            to="/login"
+            className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200"
+          >
+            Login
+          </Link>
         </div>
 
         {/* Mobile Menu Icon */}
