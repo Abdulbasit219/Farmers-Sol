@@ -7,3 +7,8 @@
   --breakpoint-xss: 320px;
    --breakpoint-mds: 760px;
 }
+@layer base {
+  body {
+    @apply bg-[#FFFBEE];
+  }
+}

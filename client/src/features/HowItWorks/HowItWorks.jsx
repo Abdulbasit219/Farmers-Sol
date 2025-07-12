@@ -25,7 +25,7 @@ function HowItWorks() {
   ];
 
   return (
-    <div className="w-full px-4 md:px-8 lg:px-16 py-12">
+    <div id="how-it-works" className="w-full px-4 md:px-8 lg:px-16 py-12">
       <h1 className="font-bold text-3xl sm:text-4xl text-center text-primary mb-10">
         How it works?
       </h1>
