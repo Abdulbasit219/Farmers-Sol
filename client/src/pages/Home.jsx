@@ -1,22 +1,20 @@
 import React from "react";
-import Navbar from "../components/ui/Navbar";
 import Hero from "../features/Hero/Hero";
 import OurServices from "../features/Services/OurServices";
 import HowItWorks from "../features/HowItWorks/HowItWorks";
 import About from "../features/About/About";
 import FAQSection from "../features/FAQ/FAQSection";
+import Contact from "../features/Contact/Contact";
 
 function Home() {
   return (
-    <div>
-      <div className="max-w-[1370px] mx-auto">
-        <Navbar />
-        <Hero />
-        <OurServices />
-        <About />
-        <HowItWorks />
-        <FAQSection/>
-      </div>
+    <div className="max-w-[1370px] mx-auto">
+      <Hero />
+      <OurServices />
+      <About />
+      <HowItWorks />
+      <FAQSection />
+      <Contact />
     </div>
   );
 }
