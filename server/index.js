@@ -23,9 +23,9 @@ app.use(cookieParser());
 
 const port = process.env.PORT;
 
-app.use("/api/v1/auth", routes);
-app.use("/api/v1/products", ProductsRoute)
-app.use("/api/v1/category", CategoryRoute)
+app.use("/auth", routes);
+app.use("/products", ProductsRoute)
+app.use("/category", CategoryRoute)
 
 app.listen(port, () => {
   console.log(`APP listening on port ${port}`);
