@@ -1,8 +1,10 @@
-import { useState } from "react";
+import React,{ useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { useRegisterUserMutation } from "../../redux/ApiSlice";
 import EyeIcon from "../../components/ui/EyeIcon";
 import { handleError, handleSuccess } from "../../Utils";
+
 function Signup() {
   const [formData, setFormData] = useState({
     name: "",
