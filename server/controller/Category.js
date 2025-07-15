@@ -1,4 +1,5 @@
 import categoryModel from "../models/CategorySchema.js";
+import productSchema from "../models/ProductSchema.js";
 
 const createCategory = async (req, res) => {
   try {
@@ -29,4 +30,64 @@ const getAllCategories = async (req, res) => {
   }
 };
 
-export { createCategory, getAllCategories };
+const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "New category name is required" });
+    }
+
+    const updateCategory = await categoryModel.findByIdAndUpdate(
+      id,
+      { name },
+      { new: true }
+    );
+
+    if (!updateCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Category updated successfully",
+      category: updateCategory,
+    });
+  } catch (error) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update category",
+    });
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+
+    const category = await categoryModel.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    await productSchema.deleteMany({ category: categoryId });
+
+    await categoryModel.findByIdAndDelete(categoryId);
+
+     res.status(200).json({
+      success: true,
+      message: "Category and its products deleted successfully",
+    });
+    
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to Delete category",
+    });
+  }
+};
+
+export { createCategory, getAllCategories, updateCategory, deleteCategory };
