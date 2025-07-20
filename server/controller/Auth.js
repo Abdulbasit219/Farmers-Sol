@@ -112,4 +112,85 @@ const checkAuth = (req, res) => {
   }
 };
 
-export { loginController, registerationController, checkAuth };
+const getUsers = async (req, res) => {
+  try {
+    const users = await userModel.find();
+    if (!users) {
+      return res.status(404).send({
+        success: false,
+        message: "No user found",
+      });
+    }
+    res.status(200).send({
+      success: true,
+      message: "User found Successfully",
+      users,
+      totalUsers: users.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let { name, email, password, role, profilePic } = req.body;
+
+    // If a new file is uploaded, update profilePic
+    if (req.file && req.file.path) {
+      profilePic = req.file.path;
+    }
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User Not found",
+      });
+    }
+
+    //check existing email
+    if (email && email !== user.email) {
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) {
+        return res.status(400).send({
+          success: false,
+          message: "A user already exists with this email address",
+        });
+      }
+    }
+
+    // password hashing (updated)
+    let updatedPassword = user.password;
+    if (password) {
+      updatedPassword = await hashedPassword(password);
+    }
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.password = updatedPassword;
+    user.role = role || user.role;
+    user.profilePic = profilePic || user.profilePic;
+
+    await user.save();
+
+    const { password: _, ...updatedUser } = user._doc;
+
+    res.status(200).send({
+      success: true,
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export {
+  loginController,
+  registerationController,
+  checkAuth,
+  getUsers,
+  updateUser,
+};

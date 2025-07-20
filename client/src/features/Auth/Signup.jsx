@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { useRegisterUserMutation } from "../../redux/ApiSlice";
@@ -124,6 +124,16 @@ function Signup() {
         >
           {isLoading ? "Signing up ..." : "Sign Up"}
         </Button>
+
+        <p className="text-center text-sm text-gray-600">
+          Already have an account?
+          <Link
+            to="/login"
+            className="text-primary font-semibold hover:underline"
+          >
+            Sign In now
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -24,6 +24,12 @@ const createCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   try {
     const categories = await categoryModel.find();
+    if (!categories) {
+      return res.status(404).send({
+        success: false,
+        message: "No categories found"
+      });
+    }
     res.status(200).json({ success: true, categories });
   } catch (error) {
     res.status(500).json({ message: "Error fetching categories" });
@@ -76,11 +82,10 @@ const deleteCategory = async (req, res) => {
 
     await categoryModel.findByIdAndDelete(categoryId);
 
-     res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Category and its products deleted successfully",
     });
-    
   } catch (err) {
     console.log(err);
     res.status(500).json({

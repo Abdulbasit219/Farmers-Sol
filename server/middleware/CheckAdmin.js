@@ -1,4 +1,3 @@
-
 const checkIsAdmin = async (req, res, next) => {
   if (req.user && req.user.isAdmin === 1) {
     next();

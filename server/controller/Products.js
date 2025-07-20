@@ -95,9 +95,51 @@ const getProducts = async (req, res) => {
   }
 };
 
-//pending
+//pending images updation
 const updateProduct = async (req, res) => {
   try {
+    const productId = req.params.id;
+    const userId = req.user._id;
+
+    const existingProduct = await productModel.findById(productId);
+    if (!existingProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    if (existingProduct.createdBy.toString() !== userId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to update this product",
+      });
+    }
+
+    const { title, description, price, quantity, category } = req.body;
+
+    const updatedFields = {
+      title: title || existingProduct.title,
+      description: description || existingProduct.description,
+      price: price || existingProduct.price,
+      quantity: quantity || existingProduct.quantity,
+      category: category || existingProduct.category,
+      // imageUrl
+    };
+
+    const updatedProducts = await productModel.findByIdAndUpdate(
+      productId,
+      updatedFields,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProducts,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -109,11 +151,11 @@ const updateProduct = async (req, res) => {
 
 const getProductsbyFarmerId = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
-    const products = await productModel.find({createdBy: id});
+    const products = await productModel.find({ createdBy: id });
 
-     if (!products) {
+    if (!products) {
       return res.status(404).json({
         success: false,
         message: "No products found for this farmer",
@@ -123,9 +165,8 @@ const getProductsbyFarmerId = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "products fetch successfully",
-      products
-    })
-
+      products,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -135,25 +176,24 @@ const getProductsbyFarmerId = async (req, res) => {
   }
 };
 
-const getProductsByCategory = async (req,res) => {
+const getProductsByCategory = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
-    const products = await productModel.find({category: id});
+    const products = await productModel.find({ category: id });
 
-    if(!products){
+    if (!products) {
       return res.status(404).json({
         success: false,
-        message: "No products founds from this category"
-      })
+        message: "No products founds from this category",
+      });
     }
 
     res.status(200).json({
       success: true,
       message: "successfully Products fetch",
-      products  
-    })
-
+      products,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -161,7 +201,29 @@ const getProductsByCategory = async (req,res) => {
       message: "Server error while get products by id",
     });
   }
-}
+};
+
+const approvedProducts = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { status } = req.body;
+    if (!["approved", "rejected"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value." });
+    }
+    const updatedProduct = await productModel.findByIdAndUpdate(productId, {
+      status,
+    });
+    res
+      .status(200)
+      .json({ message: "Product status updated.", product: updatedProduct });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while Approved products by Admin",
+    });
+  }
+};
 
 export {
   createProducts,
@@ -169,5 +231,6 @@ export {
   updateProduct,
   getProducts,
   getProductsbyFarmerId,
-  getProductsByCategory
+  getProductsByCategory,
+  approvedProducts,
 };
