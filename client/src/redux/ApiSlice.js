@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080",
+    baseUrl: "https://farmers-sol-backend.onrender.com",
     credentials: "include",
   }),
   endpoints: (builder) => ({
@@ -14,7 +14,14 @@ export const ApiSlice = createApi({
         body: userData,
       }),
     }),
+    loginUser: builder.mutation({
+      query: (loginData) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: loginData,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = ApiSlice;
+export const { useRegisterUserMutation, useLoginUserMutation } = ApiSlice;

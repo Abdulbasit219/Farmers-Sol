@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema(
       ref: 'farmerCategory',
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: "pending"
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "FarmSol", 

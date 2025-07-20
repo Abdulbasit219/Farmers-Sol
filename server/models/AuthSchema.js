@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Number,
         default: 0
+    },
+    profilePic: {
+        type: String,
+        default: ''
     }
 },{
     timestamps: true

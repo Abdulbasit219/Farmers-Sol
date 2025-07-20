@@ -1,7 +1,8 @@
 import express from "express";
 import ensureAuthenticated from "../middleware/CheckingAuth.js";
-import { createProducts, deleteProducts, getProducts, updateProduct, getProductsbyFarmerId, getProductsByCategory } from "../controller/Products.js";
+import { createProducts, deleteProducts, getProducts, updateProduct, getProductsbyFarmerId, getProductsByCategory, approvedProducts } from "../controller/Products.js";
 import cloudinaryfileUpload from "../middleware/FileUploader.js";
+import checkIsAdmin from "../middleware/CheckAdmin.js";
 
 const router = express.Router();
 
@@ -11,11 +12,14 @@ router.post('/create-products', cloudinaryfileUpload.array("imageUrl", 5), ensur
 
 router.delete('/delete-product/:id', ensureAuthenticated, deleteProducts);
 
-router.put('/update-product/:id', ensureAuthenticated, updateProduct);
+//pending images updation
+router.patch('/update-product/:id', ensureAuthenticated, updateProduct);
 
-//get product by farmer id
 router.get('/get-products/:id', ensureAuthenticated, getProductsbyFarmerId);
 
-router.get('/get-productsByCategory/:id', ensureAuthenticated, getProductsByCategory)
+router.get('/get-productsByCategory/:id', ensureAuthenticated, getProductsByCategory);
 
-export default router
+// for admin products approval 
+router.patch('/approve/:id', ensureAuthenticated, checkIsAdmin, approvedProducts )
+
+export default router;
