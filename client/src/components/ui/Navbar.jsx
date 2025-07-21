@@ -3,9 +3,13 @@ import Logo from "../../assets/sabzlink white.png";
 import { Menu } from "lucide-react";
 import { HashLink as Link } from "react-router-hash-link";
 import { RiCloseLargeFill } from "react-icons/ri";
+import { useSelector } from "react-redux";
+import Avatar from "./Avatar";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const userData = useSelector((state) => state.user);
 
   useEffect(() => {
     if (menuOpen) {
@@ -41,13 +45,19 @@ function Navbar() {
         {/* Desktop Menu */}
         <ul className="hidden lg:flex space-x-8 text-white font-medium cursor-pointer">
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/">Home</Link>
+            <Link smooth to="/">
+              Home
+            </Link>
           </li>
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#about">About</Link>
+            <Link smooth to="/#about">
+              About
+            </Link>
           </li>
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#how-it-works">How It Works</Link>
+            <Link smooth to="/#how-it-works">
+              How It Works
+            </Link>
           </li>
           <li className="hover:text-[#D8F3DC]">
             <Link to="/farmers">For Farmers</Link>
@@ -56,23 +66,32 @@ function Navbar() {
             <Link to="/buyers">For Buyers</Link>
           </li>
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#contact">Contact</Link>
+            <Link smooth to="/#contact">
+              Contact
+            </Link>
           </li>
         </ul>
 
         {/* Desktop Login Button */}
         <div className="hidden lg:block">
-          <Link
-            to="/login"
-            className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200"
-          >
-            Login
-          </Link>
+          {userData.isAuthenticated ? (
+            <Avatar user={userData.user} />
+          ) : (
+            <Link
+              to="/login"
+              className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Icon */}
         <div className="lg:hidden text-white">
-          <Menu className="w-7 h-7 cursor-pointer" onClick={() => setMenuOpen(true)} />
+          <Menu
+            className="w-7 h-7 cursor-pointer"
+            onClick={() => setMenuOpen(true)}
+          />
         </div>
       </div>
 
@@ -106,7 +125,11 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link to="/#how-it-works" smooth onClick={() => setMenuOpen(false)}>
+              <Link
+                to="/#how-it-works"
+                smooth
+                onClick={() => setMenuOpen(false)}
+              >
                 How It Works
               </Link>
             </li>
@@ -125,6 +148,7 @@ function Navbar() {
                 Contact
               </Link>
             </li>
+
             <li>
               <Link
                 to="/login"
