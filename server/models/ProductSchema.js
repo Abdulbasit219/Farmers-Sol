@@ -17,6 +17,10 @@ const productSchema = new mongoose.Schema(
     quantity: {
       type: Number,
     },
+    unit: {
+      type: String,
+      enum: ['kg', 'tons', 'quintal', 'liters'],
+    },
     imageUrl: {
       type: [String],
     },

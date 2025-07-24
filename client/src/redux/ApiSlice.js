@@ -4,7 +4,7 @@ export const ApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://farmers-sol-backend.onrender.com",
-    credentials: "include",
+    credentials: "include", //cookies
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
@@ -21,7 +21,26 @@ export const ApiSlice = createApi({
         body: loginData,
       }),
     }),
+
+    // get all categories for add product in shown in dropdown
+    getCategories: builder.query({
+      query: () => "/category",
+    }),
+
+    createProducts: builder.mutation({
+      query: (formData) => ({
+        url: "/products/create-products",
+        method: "POST",
+        body: formData,
+        formData: true
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = ApiSlice;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useGetCategoriesQuery,
+  useCreateProductsMutation,
+} = ApiSlice;

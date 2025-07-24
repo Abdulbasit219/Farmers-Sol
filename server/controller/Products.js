@@ -9,7 +9,7 @@ const createProducts = async (req, res) => {
       });
     }
 
-    const { title, description, price, quantity, category } = req.body;
+    const { title, description, price, quantity, unit, category } = req.body;
 
     if (!title || !price || !category) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -17,26 +17,29 @@ const createProducts = async (req, res) => {
 
     const imagePaths = req.files ? req.files.map((file) => file.path) : [];
 
-    const products = new productModel({
+    const newProducts = new productModel({
       title,
       description,
       price,
       quantity,
+      unit,
       category,
       imageUrl: imagePaths,
       createdBy: req.user._id,
     });
 
-    await products.save();
+    await newProducts.save();
     res.status(201).send({
       success: true,
       message: "Products was created successfully",
+      product: newProducts,
     });
   } catch (error) {
-    console.log(err);
-    res.status(500).send({
+    console.error("Create product error:", error);
+    res.status(500).json({
       success: false,
-      message: "Error while Creating a products",
+      message: "Error while creating product",
+      error: error.message,
     });
   }
 };
