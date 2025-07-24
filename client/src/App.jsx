@@ -1,13 +1,14 @@
-// src/App.jsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
-import FarmerDashboard from "./features/Dashboard/FarmerDashboard";
-import BuyerDashboard from "./features/Dashboard/BuyerDashboard";
 import PageNotFound from "./pages/PageNotFound";
 import AddProduct from "./pages/AddProduct";
 import Layout from "./Layout/Layout";
 import Login from "./features/Auth/Login";
 import Signup from "./features/Auth/Signup";
+import PrivateRoutes from "./components/routes/PrivateRoutes";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import UserDashboard from "./pages/Dashboard/UserDashboard";
+import AdminRoutes from "./components/routes/AdminRoutes";
 
 const router = createBrowserRouter([
   {
@@ -15,11 +16,24 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "", element: <Home /> },
-      { path: "dashboard/farmer", element: <FarmerDashboard /> },
-      { path: "dashboard/buyer", element: <BuyerDashboard /> },
-      { path: "add-product", element: <AddProduct /> },
-        { path: "login", element: <Login/> },
-           { path: "signup", element: <Signup/> },
+
+      // protect Admin routes
+      {
+        element: <AdminRoutes />,
+        children: [{ path: "/dashboard/admin", element: <AdminDashboard /> }],
+      },
+
+      // protect user routes
+      {
+        element: <PrivateRoutes />,
+        children: [
+          { path: "/dashboard/user", element: <UserDashboard /> },
+          { path: "/add-product", element: <AddProduct /> },
+        ],
+      },
+
+      { path: "login", element: <Login /> },
+      { path: "signup", element: <Signup /> },
     ],
   },
   { path: "*", element: <PageNotFound /> },

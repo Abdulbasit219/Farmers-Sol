@@ -16,7 +16,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "uploads",
     format: async (req, res) => "png",
-    public_id: (req, file) => file.originalname.split(".")[0] + "",
+    public_id: (req, file) => file.originalname.split(".")[0],
   },
 });
 

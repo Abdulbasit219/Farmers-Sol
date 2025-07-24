@@ -11,6 +11,12 @@ const registerationController = async (req, res) => {
       return res.send({ message: "All fields are required" });
     }
 
+    if (password.length <= 8) {
+      return res.send({
+        message: "password must be atleast 8 charachter long",
+      });
+    }
+
     //check user existing in DB
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {

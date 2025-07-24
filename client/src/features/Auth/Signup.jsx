@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { useRegisterUserMutation } from "../../redux/ApiSlice";
 import EyeIcon from "../../components/ui/EyeIcon";
 import { handleError, handleSuccess } from "../../Utils";
+import LoadingOverlay from "../../components/ui/loading/LoadingOverlay";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,9 @@ function Signup() {
 
   const [showPass, setShowPass] = useState(false);
 
-  const [registerUser, { isLoading, error, data }] = useRegisterUserMutation();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
+
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -33,13 +36,41 @@ function Signup() {
       return;
     }
 
+    // Email check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      handleError("Please enter a valid Email address");
+      return;
+    }
+
+    // Strong password regex
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
+      handleError(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character"
+      );
+      return;
+    }
+
     try {
       const res = await registerUser(formData).unwrap();
-      handleSuccess(res.message);
-    } catch (error) {
+      const { message, success } = res;
+      if (success) {
+        handleSuccess(message);
+        navigate("/login");
+      } else {
+        handleError(message);
+      }
+    } catch (err) {
       handleError(err?.data?.message || "Registration failed");
     }
   };
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFBEE] flex justify-center items-center px-4">
@@ -60,7 +91,7 @@ function Signup() {
             placeholder="Ali"
             value={formData.name}
             onChange={handleOnChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none"
           />
         </div>
 
@@ -73,7 +104,7 @@ function Signup() {
             placeholder="ali@gmail.com"
             value={formData.email}
             onChange={handleOnChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none"
           />
         </div>
 
@@ -90,7 +121,7 @@ function Signup() {
               name="password"
               onChange={handleOnChange}
               value={formData.password}
-              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg outline-none"
             />
 
             <EyeIcon
@@ -104,12 +135,12 @@ function Signup() {
         <div>
           <label className="block text-gray-800 font-medium mb-1">Role</label>
           <select
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none"
             name="role"
             value={formData.role}
             onChange={handleOnChange}
           >
-            <option value="" disabled hidden>
+            <option value="" disabled selected>
               Select your role
             </option>
             <option value="farmer">Farmer</option>

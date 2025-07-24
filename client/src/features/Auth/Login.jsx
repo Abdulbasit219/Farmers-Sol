@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import EyeIcon from "../../components/ui/EyeIcon";
 import { useLoginUserMutation } from "../../redux/ApiSlice";
 import { handleError, handleSuccess } from "../../Utils";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/UserSlice";
-
+import LoadingOverlay from "../../components/ui/loading/LoadingOverlay";
 function Login() {
   const [signIn, setSignIn] = useState({
     email: "",
@@ -14,10 +14,12 @@ function Login() {
   });
   const [showPass, setShowPass] = useState(false);
 
-  const [loginUser, { isLoading, error, data }] = useLoginUserMutation();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -34,15 +36,14 @@ function Login() {
       handleError("All fields are required");
       return;
     }
+
     try {
       const res = await loginUser(signIn).unwrap();
       const { message, success, user } = res;
       if (success) {
         handleSuccess(message);
         dispatch(setUser(user));
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        navigate(from, { replace: true });
       } else {
         handleError(message);
       }
@@ -50,6 +51,10 @@ function Login() {
       handleError(err?.data?.message || "Login failed");
     }
   };
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFBEE] flex justify-center items-center px-4">
@@ -69,7 +74,7 @@ function Login() {
             type="email"
             onChange={handleOnChange}
             placeholder="ali@gmail.com"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none"
           />
         </div>
 
@@ -85,7 +90,7 @@ function Login() {
               type={showPass ? "text" : "password"}
               placeholder="••••••••"
               onChange={handleOnChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none"
             />
             <EyeIcon
               visible={showPass}

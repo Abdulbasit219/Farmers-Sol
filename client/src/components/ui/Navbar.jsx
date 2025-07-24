@@ -34,6 +34,8 @@ function Navbar() {
     };
   }, [menuOpen]);
 
+  console.log(userData);
+
   return (
     <div className="bg-[#2D6A4F] w-full rounded-t-2xl shadow-md z-50">
       <div className="max-w-[1370px] mx-auto px-4 h-[70px] flex items-center justify-between">
@@ -59,12 +61,15 @@ function Navbar() {
               How It Works
             </Link>
           </li>
+          {userData?.user?.role === "farmer" && (
+            <li className="hover:text-[#D8F3DC]">
+              <Link to="/add-product">Add Products</Link>
+            </li>
+          )}
           <li className="hover:text-[#D8F3DC]">
-            <Link to="/farmers">For Farmers</Link>
+            <Link to="/buyers">View Products</Link>
           </li>
-          <li className="hover:text-[#D8F3DC]">
-            <Link to="/buyers">For Buyers</Link>
-          </li>
+
           <li className="hover:text-[#D8F3DC]">
             <Link smooth to="/#contact">
               Contact
@@ -87,9 +92,14 @@ function Navbar() {
         </div>
 
         {/* Mobile Menu Icon */}
-        <div className="lg:hidden text-white">
+        <div className="flex items-center gap-x-2 lg:hidden text-white">
+          {userData.isAuthenticated && (
+            <div>
+              <Avatar user={userData.user} />
+            </div>
+          )}
           <Menu
-            className="w-7 h-7 cursor-pointer"
+            className="w-7 h-8 cursor-pointer"
             onClick={() => setMenuOpen(true)}
           />
         </div>
@@ -149,15 +159,17 @@ function Navbar() {
               </Link>
             </li>
 
-            <li>
-              <Link
-                to="/login"
-                className="text-center bg-[#2D6A4F] text-white px-4 py-2 rounded-lg"
-                onClick={() => setMenuOpen(false)}
-              >
-                Login
-              </Link>
-            </li>
+            {!userData.isAuthenticated && (
+              <li>
+                <Link
+                  to="/login"
+                  className="text-center bg-[#2D6A4F] text-white px-4 py-2 rounded-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

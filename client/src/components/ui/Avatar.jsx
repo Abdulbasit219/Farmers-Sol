@@ -19,7 +19,7 @@ function Avatar({ user }) {
     <div className="relative flex items-center text-left">
       <div
         onClick={toggleDropdown}
-        className="w-10 h-10 rounded-full cursor-pointer overflow-hidden flex items-center justify-center bg-gray-200"
+        className="w-8 h-8 rounded-full cursor-pointer overflow-hidden flex items-center justify-center bg-gray-200"
       >
         {user.profilePic ? (
           <img
@@ -28,8 +28,9 @@ function Avatar({ user }) {
             alt="User dropdown"
           />
         ) : (
-          <RxAvatar className="text-2xl text-gray-600"/>
+          <RxAvatar className="text-2xl lg:text-2xl text-gray-600" />
         )}
+        
       </div>
 
       {/* Dropdown menu */}
@@ -48,7 +49,8 @@ function Avatar({ user }) {
           >
             <li>
               <Link
-                href="#"
+                to="/dashboard/farmer"
+                onClick={toggleDropdown}
                 className="block px-4 py-2 hover:text-[#2D6A4F] dark:hover:bg-[#2D6A4F] dark:hover:text-white"
               >
                 Dashboard
@@ -57,6 +59,7 @@ function Avatar({ user }) {
             <li>
               <Link
                 href="#"
+                onClick={toggleDropdown}
                 className="block px-4 py-2 hover:text-[#2D6A4F] dark:hover:bg-[#2D6A4F] dark:hover:text-white"
               >
                 Settings
