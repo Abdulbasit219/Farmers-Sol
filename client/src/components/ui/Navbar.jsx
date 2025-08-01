@@ -34,18 +34,17 @@ function Navbar() {
     };
   }, [menuOpen]);
 
-  console.log(userData);
-
   return (
-    <div className="bg-[#2D6A4F] w-full rounded-t-2xl shadow-md z-50">
-      <div className="max-w-[1370px] mx-auto px-4 h-[70px] flex items-center justify-between">
+    <div className="sticky top-0 rounded-b-4xl bg-[#2D6A4F] w-full shadow-md z-50">
+      <div className="mx-auto px-4 h-25 flex items-center justify-around">
+        
         {/* Logo */}
         <div className="flex items-center">
           <img src={Logo} alt="Logo" className="h-[150px] object-contain" />
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex space-x-8 text-white font-medium cursor-pointer">
+        <ul className="hidden lg:flex space-x-8 text-white font-medium text-xl cursor-pointer">
           <li className="hover:text-[#D8F3DC]">
             <Link smooth to="/">
               Home
@@ -67,7 +66,7 @@ function Navbar() {
             </li>
           )}
           <li className="hover:text-[#D8F3DC]">
-            <Link to="/buyers">View Products</Link>
+            <Link to="/products">View Products</Link>
           </li>
 
           <li className="hover:text-[#D8F3DC]">
@@ -77,10 +76,10 @@ function Navbar() {
           </li>
         </ul>
 
-        {/* Desktop Login Button */}
+        {/* Desktop Login Button and profile Avatar dropdown*/}
         <div className="hidden lg:block">
           {userData.isAuthenticated ? (
-            <Avatar user={userData.user} />
+            <Avatar />
           ) : (
             <Link
               to="/login"
@@ -92,10 +91,10 @@ function Navbar() {
         </div>
 
         {/* Mobile Menu Icon */}
-        <div className="flex items-center gap-x-2 lg:hidden text-white">
+        <div className="flex items-center lg:hidden text-white">
           {userData.isAuthenticated && (
             <div>
-              <Avatar user={userData.user} />
+              <Avatar />
             </div>
           )}
           <Menu
@@ -124,16 +123,21 @@ function Navbar() {
             className="text-3xl self-end cursor-pointer"
           />
           <ul className="flex flex-col gap-6 mt-6 text-lg font-medium">
+            {/* home */}
             <li>
               <Link to="/" smooth onClick={() => setMenuOpen(false)}>
                 Home
               </Link>
             </li>
+
+            {/* about  */}
             <li>
               <Link to="/#about" smooth onClick={() => setMenuOpen(false)}>
                 About
               </Link>
             </li>
+
+            {/* how it works  */}
             <li>
               <Link
                 to="/#how-it-works"
@@ -143,16 +147,20 @@ function Navbar() {
                 How It Works
               </Link>
             </li>
+
+            {userData?.user?.role === "farmer" && (
+              <li>
+                <Link to="/add-product" onClick={() => setMenuOpen(false)}>
+                  Add Products
+                </Link>
+              </li>
+            )}
             <li>
-              <Link to="/farmers" onClick={() => setMenuOpen(false)}>
-                For Farmers
+              <Link to="/products" onClick={() => setMenuOpen(false)}>
+                View Products
               </Link>
             </li>
-            <li>
-              <Link to="/buyers" onClick={() => setMenuOpen(false)}>
-                For Buyers
-              </Link>
-            </li>
+
             <li>
               <Link to="/#contact" smooth onClick={() => setMenuOpen(false)}>
                 Contact

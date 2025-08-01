@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://farmers-sol-backend.onrender.com",
-    credentials: "include", //cookies
+    baseUrl: "https://farmers-sol-1.onrender.com",
+    credentials: "include",
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
@@ -14,6 +14,7 @@ export const ApiSlice = createApi({
         body: userData,
       }),
     }),
+
     loginUser: builder.mutation({
       query: (loginData) => ({
         url: "/auth/login",
@@ -32,8 +33,27 @@ export const ApiSlice = createApi({
         url: "/products/create-products",
         method: "POST",
         body: formData,
-        formData: true
       }),
+    }),
+
+    // get all products/items
+    getProducts: builder.query({
+      query: () => "/products/get-products",
+    }),
+
+    //get products by category
+    getProductByCategory: builder.query({
+      query: (catId) => `/products/get-productsByCategory/${catId}`,
+    }),
+
+    //get products by id
+    getProductsById: builder.query({
+      query: (id) => `/products/get-productById/${id}`,
+    }),
+
+    // get categories by id
+    getCategoryById: builder.query({
+      query: (id) => `/category/get-Category/${id}`,
     }),
   }),
 });
@@ -43,4 +63,8 @@ export const {
   useLoginUserMutation,
   useGetCategoriesQuery,
   useCreateProductsMutation,
+  useGetProductsQuery,
+  useGetProductByCategoryQuery,
+  useGetProductsByIdQuery,
+  useGetCategoryByIdQuery,
 } = ApiSlice;

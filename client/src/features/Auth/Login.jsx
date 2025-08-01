@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import EyeIcon from "../../components/ui/EyeIcon";
 import { useLoginUserMutation } from "../../redux/ApiSlice";
 import { handleError, handleSuccess } from "../../Utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/UserSlice";
 import LoadingOverlay from "../../components/ui/loading/LoadingOverlay";
 function Login() {
@@ -13,6 +13,7 @@ function Login() {
     password: "",
   });
   const [showPass, setShowPass] = useState(false);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
@@ -51,6 +52,12 @@ function Login() {
       handleError(err?.data?.message || "Login failed");
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   if (isLoading) {
     return <LoadingOverlay />;

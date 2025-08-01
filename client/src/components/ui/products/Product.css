@@ -1,0 +1,87 @@
+.card {
+  --font-color: #2e7d32; 
+  --font-color-sub: #4caf50; 
+  --bg-color: #ffffff;
+  --main-color: #2e7d32; 
+  --main-focus: #66bb6a; 
+
+  width: 330px;
+  height: 330px;
+  background: var(--bg-color);
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 16px;
+  gap: 12px;
+  font-family: "Segoe UI", sans-serif;
+  transition: transform 0.2s ease;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Product Image */
+.card-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f1f8f4; /* light greenish bg */
+}
+
+.card-img img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+/* Titles & Descriptions */
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--font-color);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  text-align: center;
+  color: var(--font-color-sub);
+}
+
+/* Divider */
+.card-divider {
+  width: 100%;
+  border: 1px solid var(--main-color);
+  border-radius: 50px;
+}
+
+/* Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--font-color);
+}
+
+.card-price span {
+  font-size: 18px;
+  color: var(--font-color);
+}
+
+

@@ -13,7 +13,7 @@ function AddProduct() {
     title: "",
     price: "",
     quantity: "",
-    unit: "kg",
+    unit: "",
     category: "",
     description: "",
   });
@@ -78,7 +78,8 @@ function AddProduct() {
 
   return (
     <div className="min-h-screen bg-[#FFFBEE] px-4 py-10">
-      <div className="text-center mb-10">
+      {/* main heading */}
+      <div className="text-center mb-10 w-[95%]">
         <h1 className="text-4xl sm:text-5xl font-bold text-primary">
           List Your Crop
         </h1>
@@ -87,7 +88,7 @@ function AddProduct() {
         </p>
       </div>
 
-      <div className="bg-white border w-[80%] mx-auto border-gray-200 shadow-md rounded-2xl">
+      <div className="bg-white border w-[95%] md:w-[85%] mx-auto border-gray-200 shadow-md rounded-2xl">
         <form className="p-6 w-full" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-10">
             {/* Left: Form Fields */}
@@ -139,10 +140,11 @@ function AddProduct() {
                     <option value="" disabled selected>
                       Select Unit
                     </option>
-                    <option value="kg">kg</option>
-                    <option value="tons">tons</option>
-                    <option value="quintal">quintal</option>
-                    <option value="liters">liters</option>
+                    <option value="kg">Kg</option>
+                    <option value="tons">Tons</option>
+                    <option value="quintal">Quintal</option>
+                    <option value="liters">Liters</option>
+                    <option value="dozen">Dozen</option>
                   </select>
                 </div>
               </div>

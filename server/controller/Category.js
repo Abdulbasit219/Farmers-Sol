@@ -27,7 +27,7 @@ const getAllCategories = async (req, res) => {
     if (!categories) {
       return res.status(404).send({
         success: false,
-        message: "No categories found"
+        message: "No categories found",
       });
     }
     res.status(200).json({ success: true, categories });
@@ -95,4 +95,30 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-export { createCategory, getAllCategories, updateCategory, deleteCategory };
+const getCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const category = await categoryModel.find({ _id: id });
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "No category founds from this Id",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "successfully Category fetch",
+      category,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get category By Id",
+    });
+  }
+};
+
+export { createCategory, getAllCategories, updateCategory, deleteCategory, getCategoryById };

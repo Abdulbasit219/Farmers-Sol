@@ -9,6 +9,9 @@ import PrivateRoutes from "./components/routes/PrivateRoutes";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard";
 import UserDashboard from "./pages/Dashboard/UserDashboard";
 import AdminRoutes from "./components/routes/AdminRoutes";
+import ProductList from "./pages/ProductList";
+import ProductDetail from "./pages/ProductDetail";
+import PublicRoutes from "./components/routes/PublicRoutes";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +19,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "", element: <Home /> },
+      { path: "/products", element: <ProductList /> },
+      { path: "/products-details/:id", element: <ProductDetail /> },
 
       // protect Admin routes
       {
@@ -31,9 +36,13 @@ const router = createBrowserRouter([
           { path: "/add-product", element: <AddProduct /> },
         ],
       },
-
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
+      {
+        element: <PublicRoutes />,
+        children: [
+          { path: "login", element: <Login /> },
+          { path: "signup", element: <Signup /> },
+        ],
+      },
     ],
   },
   { path: "*", element: <PageNotFound /> },

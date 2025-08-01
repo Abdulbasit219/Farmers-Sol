@@ -1,7 +1,7 @@
 import express from "express";
 import ensureAuthenticated from "../middleware/CheckingAuth.js";
 import checkIsAdmin from "../middleware/CheckAdmin.js";
-import { createCategory, deleteCategory, getAllCategories, updateCategory } from "../controller/Category.js";
+import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from "../controller/Category.js";
 
 const router = express.Router();
 
@@ -12,5 +12,7 @@ router.get('/', getAllCategories);
 router.put('/update-category/:id', ensureAuthenticated, checkIsAdmin, updateCategory);
 
 router.delete('/delete-category/:id', ensureAuthenticated, checkIsAdmin, deleteCategory);
+
+router.get('/get-Category/:id', ensureAuthenticated, getCategoryById);
 
 export default router;
