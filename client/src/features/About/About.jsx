@@ -10,7 +10,7 @@ function About() {
         About Us
       </h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 mds:grid-cols-1 gap-10 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 mds:grid-cols-1 gap-10 items-center ">
         {/* Left*/}
         <div className="flex justify-center">
           <img
@@ -39,11 +39,12 @@ function About() {
           </p>
 
           <div className="mt-6">
-            <Button className="bg-green-600 cursor-pointer text-white hover:bg-green-700">
+            <Button className="bg-primary border border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200 cursor-pointer">
               Learn More
             </Button>
           </div>
         </div>
+        
       </div>
     </div>
   );

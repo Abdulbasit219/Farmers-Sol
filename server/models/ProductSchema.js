@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema(
     },
     unit: {
       type: String,
-      enum: ['kg', 'tons', 'quintal', 'liters'],
+      enum: ['kg', 'tons', 'quintal', 'liters', 'dozen'],
     },
     imageUrl: {
       type: [String],

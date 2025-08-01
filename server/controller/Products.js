@@ -228,6 +228,33 @@ const approvedProducts = async (req, res) => {
   }
 };
 
+const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const products = await productModel.find({_id: id});
+
+    if (!products) {
+      return res.status(404).json({
+        success: false,
+        message: "No products founds from this id",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "successfully Products fetch",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while get products by id",
+    });
+  }
+};
+
 export {
   createProducts,
   deleteProducts,
@@ -236,4 +263,5 @@ export {
   getProductsbyFarmerId,
   getProductsByCategory,
   approvedProducts,
+  getProductById,
 };

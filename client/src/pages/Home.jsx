@@ -8,7 +8,7 @@ import Contact from "../features/Contact/Contact";
 
 function Home() {
   return (
-    <div className="max-w-[1370px] mx-auto">
+    <div>
       <Hero />
       <OurServices />
       <About />

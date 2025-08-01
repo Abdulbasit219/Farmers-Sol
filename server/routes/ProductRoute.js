@@ -8,6 +8,7 @@ import {
   getProductsbyFarmerId,
   getProductsByCategory,
   approvedProducts,
+  getProductById
 } from "../controller/Products.js";
 import cloudinaryfileUpload from "../middleware/FileUploader.js";
 import checkIsAdmin from "../middleware/CheckAdmin.js";
@@ -24,6 +25,8 @@ router.post(
 );
 
 router.delete("/delete-product/:id", ensureAuthenticated, deleteProducts);
+
+router.get("/get-productById/:id", ensureAuthenticated, getProductById)
 
 //pending images updation
 router.patch("/update-product/:id", ensureAuthenticated, updateProduct);

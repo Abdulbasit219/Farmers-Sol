@@ -4,11 +4,11 @@ import { Outlet, useLocation } from "react-router-dom";
 
 function Layout() {
   const location = useLocation();
-  const hideLayout = ["/login", "/signup", "/add-product"].includes(location.pathname);
+  const hideLayout = ["/login", "/signup"].includes(location.pathname);
 
   return (
     <div className="bg-[#FFFBEE] min-h-screen flex flex-col">
-      <div className="max-w-[1370px] mx-auto w-full">
+      <div className="w-full">
         {!hideLayout && <Navbar />}
         <main className="flex-grow">
           <Outlet />
