@@ -86,11 +86,12 @@ const loginController = async (req, res) => {
     });
 
     const { password: _, ...rest } = user._doc;
-
+    
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensures HTTPS in production
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None", // ✅ REQUIRED when using cross-site cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     //send details
