@@ -1,5 +1,4 @@
-import { Twitter, Facebook, Instagram, Linkedin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Twitter, Instagram, Linkedin, Github } from "lucide-react";
 
 function Footer() {
   return (
@@ -10,18 +9,45 @@ function Footer() {
 
         {/* Social Icons */}
         <div className="flex space-x-6">
-          <Link to="" aria-label="Twitter">
+          {/* Twitter */}
+          <a
+            href="https://twitter.com/yourusername"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+          >
             <Twitter className="hover:text-lime-300 transition-colors" />
-          </Link>
-          <Link>
-            <Facebook className="hover:text-lime-300 transition-colors" />
-          </Link>
-          <Link to="" aria-label="Instagram">
+          </a>
+
+          {/* Facebook */}
+          <a
+            href="https://github.com/Abdulbasit219/Farmers-Sol"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <Github className="hover:text-lime-300 transition-colors" />
+          </a>
+
+          {/* Instagram */}
+          <a
+            href="https://instagram.com/yourusername"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
             <Instagram className="hover:text-lime-300 transition-colors" />
-          </Link>
-          <Link to="" aria-label="LinkedIn">
+          </a>
+
+          {/* LinkedIn */}
+          <a
+            href="https://www.linkedin.com/in/abdul-basit2259/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
             <Linkedin className="hover:text-lime-300 transition-colors" />
-          </Link>
+          </a>
         </div>
 
         {/* Copyright */}

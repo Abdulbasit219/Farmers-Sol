@@ -6,18 +6,27 @@ import {
 } from "../../redux/ApiSlice";
 import LoadingOverlay from "../../components/ui/loading/LoadingOverlay";
 import DashboardCard from "../../components/ui/dashborad/DashboardCard";
-import { ClipboardList, Clock, DollarSign, PackageCheck, ShoppingCart, Store, Truck, XCircle } from "lucide-react";
+import {
+  ClipboardList,
+  Clock,
+  DollarSign,
+  PackageCheck,
+  ShoppingCart,
+  Store,
+  Truck,
+  XCircle,
+} from "lucide-react";
 
 function UserDashboard() {
   const { user } = useSelector((state) => state.user);
 
-  const { data, isLoading } = useGetProductsByFarmerIdQuery(
-    { id: user?._id, page: 1, query: "" },
-    { skip: !user?._id }
-  );
-
   const isBuyer = user?.role === "buyer";
   const isFarmer = user?.role === "farmer";
+
+  const { data, isLoading } = useGetProductsByFarmerIdQuery(
+    { id: user?._id, page: 1, query: "" },
+    { skip: !user?._id || !isFarmer }
+  );
 
   const { data: userOrder } = useGetBuyerOrdersQuery(
     { id: user._id, query: "" },
@@ -47,20 +56,20 @@ function UserDashboard() {
             <DashboardCard
               title="Total Products"
               value={data?.pagination?.totalProducts || 0}
-              icon={<Store size={40}/>}
+              icon={<Store size={40} />}
               type="user"
             />
 
             <DashboardCard
               title="Revenue"
               value={totalRevenue}
-              icon={<DollarSign size={40}/>}
+              icon={<DollarSign size={40} />}
             />
 
             <DashboardCard
               title="Total Orders"
               value={farmerOrder?.orders?.length}
-              icon={<ShoppingCart size={40}/>}
+              icon={<ShoppingCart size={40} />}
             />
 
             <DashboardCard
@@ -70,7 +79,7 @@ function UserDashboard() {
                   (order) => order.status === "shipped"
                 ).length
               }
-              icon={<Truck size={40}/>}
+              icon={<Truck size={40} />}
             />
           </>
         )}
@@ -79,7 +88,7 @@ function UserDashboard() {
             <DashboardCard
               title="Total Orders"
               value={userOrder?.orders.length}
-              icon={<ClipboardList size={40}/>}
+              icon={<ClipboardList size={40} />}
             />
             <DashboardCard
               title="Pending Orders"
@@ -87,7 +96,7 @@ function UserDashboard() {
                 userOrder?.orders.filter((order) => order.status === "pending")
                   .length
               }
-              icon={<Clock size={40}/>}
+              icon={<Clock size={40} />}
             />
             <DashboardCard
               title="Delivered Orders"
@@ -96,7 +105,7 @@ function UserDashboard() {
                   (order) => order.status === "delivered"
                 ).length
               }
-              icon={<PackageCheck size={40}/>}
+              icon={<PackageCheck size={40} />}
             />
             <DashboardCard
               title="Cancelled Orders"
@@ -105,7 +114,7 @@ function UserDashboard() {
                   (order) => order.status === "cancelled"
                 ).length
               }
-              icon={<XCircle size={40}/>}
+              icon={<XCircle size={40} />}
             />
           </>
         )}

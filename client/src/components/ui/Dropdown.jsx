@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { FiFilter } from "react-icons/fi";
 
@@ -11,13 +11,23 @@ const Dropdown = ({
   position,
 }) => {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
-    <div className={`relative inline-block text-left w-full`}>
-     
+    <div ref={dropdownRef} className={`relative inline-block text-left w-full`}>
       {/* Button */}
       <Button
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((prev) => !prev)}
         className={`flex items-center outline-none gap-2 px-4 py-2 text-green-900 rounded-md cursor-pointer ${className}`}
       >
         {buttonContent === "Category" ? (
