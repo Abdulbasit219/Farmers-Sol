@@ -1,13 +1,12 @@
-import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../../redux/UserSlice";
-import { Link, useNavigate } from "react-router-dom";
-import { RxAvatar } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
+import { LayoutDashboard, LogOut, Settings } from "lucide-react";
+import AvatarIcon from "../../assets/avatarIcon.jpg";
 
 function Avatar() {
-
-  const userData = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,37 +16,39 @@ function Avatar() {
   };
 
   const menuItems = [
-    { label: "Dashboard", onClick: () => navigate("/dashboard/farmer") },
-    { label: "Settings", onClick: () => console.log("Settings clicked") },
-    { label: "Sign out", onClick: handleLogout },
+    {
+      label: "DashBoard",
+      icon: <LayoutDashboard />,
+      onClick: () => navigate("/dashboard/user"),
+    },
+    {
+      label: "Settings",
+      icon: <Settings />,
+      onClick: () => navigate("/user-profile"),
+    },
+    { label: "Sign out", icon: <LogOut />, onClick: handleLogout },
   ];
 
   return (
     <>
       <Dropdown
         buttonContent={
-          userData.profilePic ? (
-            <img
-              className="w-10 h-10 rounded-full cursor-pointer"
-              src={user.profilePic}
-              alt="User avatar"
-            />
-          ) : (
-            <RxAvatar className="text-xl bg-white w-8 h-8 rounded-full cursor-pointer text-gray-600" />
-          )
+          <img
+            className="w-12 h-12 rounded-full cursor-pointer border object-cover"
+            src={user.profilePic || AvatarIcon}
+            alt="User avatar"
+          />
         }
-
         header={
           <div>
-            <div className="font-bold">{userData?.user?.name}</div>
-            <div className="font-medium truncate">{userData?.user?.email}</div>
+            <div className="font-bold">{user?.name}</div>
+            <div className="font-medium truncate">{user?.email}</div>
           </div>
         }
-
         menuItems={menuItems}
         className="justify-end"
-        svg = {false}
-        position='right-4'
+        svg={false}
+        position="right-4"
       />
     </>
   );

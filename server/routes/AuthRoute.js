@@ -5,6 +5,7 @@ import {
   loginController,
   updateUser,
   registerationController,
+  deleteUser,
 } from "../controller/Auth.js";
 import ensureAuthenticated from "../middleware/CheckingAuth.js";
 import checkIsAdmin from "../middleware/CheckAdmin.js";
@@ -20,6 +21,18 @@ router.get("/check", ensureAuthenticated, checkAuth);
 
 router.get("/", ensureAuthenticated, checkIsAdmin, getUsers);
 
-router.put("/update_user/:id", ensureAuthenticated, cloudinaryfileUpload.single('profilePic'), updateUser)
+router.put(
+  "/update_user/:id",
+  ensureAuthenticated,
+  cloudinaryfileUpload.single("profilePic"),
+  updateUser
+);
+
+router.delete(
+  "/delete_user/:id",
+  ensureAuthenticated,
+  checkIsAdmin,
+  deleteUser
+);
 
 export default router;

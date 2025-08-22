@@ -1,17 +1,28 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout/Layout";
 import Home from "./pages/Home";
 import PageNotFound from "./pages/PageNotFound";
-import AddProduct from "./pages/AddProduct";
-import Layout from "./Layout/Layout";
 import Login from "./features/Auth/Login";
 import Signup from "./features/Auth/Signup";
-import PrivateRoutes from "./components/routes/PrivateRoutes";
-import AdminDashboard from "./pages/Dashboard/AdminDashboard";
-import UserDashboard from "./pages/Dashboard/UserDashboard";
-import AdminRoutes from "./components/routes/AdminRoutes";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
+
+import PrivateRoutes from "./components/routes/PrivateRoutes";
+import AdminRoutes from "./components/routes/AdminRoutes";
 import PublicRoutes from "./components/routes/PublicRoutes";
+
+import DashBoardLayout from "./Layout/DashBoardLayout";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import UserDashboard from "./pages/Dashboard/UserDashboard";
+import AddProduct from "./components/ui/dashborad/AddProduct";
+import MyProducts from "./components/ui/dashborad/MyProducts";
+import UserProfile from "./pages/UserProfile";
+import ManageUsers from "./components/ui/dashborad/ManageUsers";
+import ManageProducts from "./components/ui/dashborad/ManageProducts";
+import ManageCategory from "./components/ui/dashborad/ManageCategory";
+import MyOrders from "./components/ui/dashborad/MyOrders";
+import ReceivedOrders from "./components/ui/dashborad/ReceivedOrders";
+import ManageOrders from "./components/ui/dashborad/ManageOrders";
 
 const router = createBrowserRouter([
   {
@@ -19,23 +30,52 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "", element: <Home /> },
-      { path: "/products", element: <ProductList /> },
-      { path: "/products-details/:id", element: <ProductDetail /> },
+      { path: "products", element: <ProductList /> },
+      { path: "products-details/:id", element: <ProductDetail /> },
 
-      // protect Admin routes
+      // USER DASHBOARD
       {
-        element: <AdminRoutes />,
-        children: [{ path: "/dashboard/admin", element: <AdminDashboard /> }],
-      },
-
-      // protect user routes
-      {
+        path: "/dashboard",
         element: <PrivateRoutes />,
         children: [
-          { path: "/dashboard/user", element: <UserDashboard /> },
-          { path: "/add-product", element: <AddProduct /> },
+          {
+            element: <DashBoardLayout />,
+            children: [
+              { path: "user", element: <UserDashboard /> },
+              { path: "add-product", element: <AddProduct /> },
+              { path: "my-products", element: <MyProducts /> },
+              { path: "orders", element: <MyOrders /> },
+              { path: "receivedOrders", element: <ReceivedOrders /> },
+            ],
+          },
         ],
       },
+
+      {
+        path: "/user-profile",
+        element: <PrivateRoutes />,
+        children: [{ path: "", element: <UserProfile /> }],
+      },
+
+      // ADMIN DASHBOARD
+      {
+        path: "/admin",
+        element: <AdminRoutes />,
+        children: [
+          {
+            element: <DashBoardLayout />, // sidebar here for all admin routes
+            children: [
+              { path: "dashboard", element: <AdminDashboard /> },
+              { path: "manage-users", element: <ManageUsers /> },
+              { path: "manage-products", element: <ManageProducts /> },
+              { path: "manage-category", element: <ManageCategory /> },
+              { path: "manage-orders", element: <ManageOrders /> },
+            ],
+          },
+        ],
+      },
+
+      // PUBLIC ROUTES
       {
         element: <PublicRoutes />,
         children: [

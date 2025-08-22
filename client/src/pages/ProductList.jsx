@@ -1,88 +1,107 @@
-import { useState } from "react";
 import Dropdown from "../components/ui/Dropdown";
 import LoadingOverlay from "../components/ui/loading/LoadingOverlay";
 import ProductCard from "../components/ui/products/ProductCard";
-import {
-  useGetCategoriesQuery,
-  useGetProductByCategoryQuery,
-  useGetProductsQuery,
-} from "../redux/ApiSlice";
 import Search from "../components/ui/Search";
+import useCategoryFilter from "../hooks/useCategoryFilter";
+import Pagination from "../components/ui/Pagination";
+import useSearchProducts from "../hooks/useSearchProducts";
 
 function ProductList() {
-  const [selectedCatId, setSelectedCatId] = useState(null);
-  const [searchProducts, setSearchProducts] = useState("");
+  const {
+    categoryMenuItems,
+    selectedCatName,
+    products,
+    isLoading,
+    page,
+    setPage,
+    totalPages,
+  } = useCategoryFilter();
 
-  const { data: allProductsData, isLoading: isAllProductsLoading } =
-    useGetProductsQuery();
-  const { data: catData, isLoading: isCategoriesLoading } =
-    useGetCategoriesQuery();
-  const { data: productsByCatData, isLoading: isProductsByCatLoading } =
-    useGetProductByCategoryQuery(selectedCatId, {
-      skip: !selectedCatId,
-    });
+  const {
+    search,
+    setSearch,
+    searchResults,
+    isSearching,
+    isSearchLoading,
+    handleSearchProduct,
+    page: searchPage,
+    setPage: setSearchPage,
+    totalPages: searchTotalPages,
+  } = useSearchProducts();
 
-  const products = selectedCatId
-    ? productsByCatData?.products || []
-    : allProductsData?.products || [];
+  const displayProducts = isSearching ? searchResults : products;
 
-  const categories = catData?.categories || [];
-
-  const categoryMenuItems = categories.map((cat) => ({
-    label: cat.name,
-    onClick: () => setSelectedCatId(cat._id),
-  }));
-
-  const filteredProducts = products.filter((p) => {
-    return (
-      p.title.toLowerCase().includes(searchProducts.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchProducts.toLowerCase())
-    );
-  });
-
-  if (isAllProductsLoading || isCategoriesLoading || isProductsByCatLoading) {
+  if (isLoading || isSearchLoading) {
     return <LoadingOverlay />;
   }
 
   return (
-    <div className="w-[90%] mx-auto">
-      {/* category dropdown and search */}
-      <div className="my-4 flex flex-col-reverse md:flex-row items-start md:items-center md:justify-between w-full">
-        <div className="w-full md:w-auto">
-          <Dropdown
-            buttonContent="Category"
-            menuItems={categoryMenuItems}
-            className="bg-green-100 hover:bg-green-200 justify-between w-full"
-            svg={true}
-            position="left-0"
-          />
+    <>
+      {isLoading || isSearchLoading ? (
+        <div>
+          <LoadingOverlay />
         </div>
-        <div className="w-full md:w-auto">
-          <Search onSearch={setSearchProducts} />
-        </div>
-      </div>
+      ) : (
+        <div className="w-[90%] mx-auto">
+          {/* category dropdown and search */}
+          <div className="my-4 flex flex-col-reverse md:flex-row items-start md:items-center md:justify-between">
+            <div className="w-full md:w-auto">
+              <Dropdown
+                buttonContent={
+                  selectedCatName === "All Products"
+                    ? "Category"
+                    : selectedCatName.name[0].toUpperCase() +
+                      selectedCatName.name.slice(1)
+                }
+                menuItems={categoryMenuItems}
+                className="bg-[#E4F8E2] hover:bg-[#daf3d7] justify-between w-full"
+                svg={true}
+                position="left-0"
+                products={products}
+              />
+            </div>
+            <div className="w-full md:w-auto">
+              <Search
+                setSearch={setSearch}
+                search={search}
+                handleSearchProduct={handleSearchProduct}
+              />
+            </div>
+          </div>
 
-      <div className="flex gap-[20px] flex-wrap">
-        {products.length === 0 ? (
-          <p>No products available.</p>
-        ) : filteredProducts.length === 0 ? (
-          <p>No products found.</p>
-        ) : (
-          filteredProducts.map((p) => (
-            <ProductCard
-              key={p._id}
-              title={p.title}
-              description={p.description}
-              price={p.price}
-              imageUrl={p.imageUrl[0]}
-              quantity={p.quantity}
-              unit={p.unit}
-              productId={p._id}
+          <div className="flex gap-[20px] flex-wrap">
+            {displayProducts.length === 0 ? (
+              <p className="text-red-500 py-4 w-full flex justify-center">
+                {isSearching
+                  ? "No products found for your search."
+                  : `No products available at this ${selectedCatName.name} category.`}
+              </p>
+            ) : (
+              displayProducts.map((p) => (
+                <ProductCard
+                  key={p._id}
+                  title={p.title}
+                  description={p.description}
+                  price={p.price}
+                  imageUrl={p.imageUrl[0]}
+                  quantity={p.quantity}
+                  unit={p.unit}
+                  productId={p._id}
+                />
+              ))
+            )}
+          </div>
+
+          <div className="flex gap-2 justify-end lg:mr-12 p-4">
+            <Pagination
+              page={isSearching ? searchPage : page}
+              totalPages={isSearching ? searchTotalPages : totalPages}
+              setPage={isSearching ? setSearchPage : setPage}
             />
-          ))
-        )}
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

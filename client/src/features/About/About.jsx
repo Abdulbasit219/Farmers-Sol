@@ -39,7 +39,7 @@ function About() {
           </p>
 
           <div className="mt-6">
-            <Button className="bg-primary border border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200 cursor-pointer">
+            <Button className="bg-primary border border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200 cursor-pointer py-3 px-6">
               Learn More
             </Button>
           </div>

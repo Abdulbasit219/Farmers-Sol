@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import Logo from "../../assets/sabzlink white.png";
-import { Menu } from "lucide-react";
+import {
+  Cog,
+  House,
+  Info,
+  LogIn,
+  Mail,
+  Menu,
+  PackageSearch,
+} from "lucide-react";
 import { HashLink as Link } from "react-router-hash-link";
 import { RiCloseLargeFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
@@ -36,8 +44,8 @@ function Navbar() {
 
   return (
     <div className="sticky top-0 rounded-b-4xl bg-[#2D6A4F] w-full shadow-md z-50">
+      {/* for desktop */}
       <div className="mx-auto px-4 h-25 flex items-center justify-around">
-        
         {/* Logo */}
         <div className="flex items-center">
           <img src={Logo} alt="Logo" className="h-[150px] object-contain" />
@@ -45,47 +53,52 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex space-x-8 text-white font-medium text-xl cursor-pointer">
+          {/* home */}
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/">
-              Home
+            <Link smooth to="/" className="flex items-center gap-2">
+              <House /> Home
             </Link>
           </li>
+          {/* about  */}
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#about">
-              About
+            <Link smooth to="/#about" className="flex items-center gap-2">
+              <Info /> About
             </Link>
           </li>
+          {/* how it work */}
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#how-it-works">
-              How It Works
+            <Link
+              smooth
+              to="/#how-it-works"
+              className="flex items-center gap-2"
+            >
+              <Cog /> How It Works
             </Link>
           </li>
-          {userData?.user?.role === "farmer" && (
-            <li className="hover:text-[#D8F3DC]">
-              <Link to="/add-product">Add Products</Link>
-            </li>
-          )}
+          {/* view product */}
           <li className="hover:text-[#D8F3DC]">
-            <Link to="/products">View Products</Link>
+            <Link to="/products" className="flex items-center gap-2">
+              <PackageSearch /> View Products
+            </Link>
           </li>
-
+          {/* contact */}
           <li className="hover:text-[#D8F3DC]">
-            <Link smooth to="/#contact">
-              Contact
+            <Link smooth to="/#contact" className="flex items-center gap-2">
+              <Mail /> Contact
             </Link>
           </li>
         </ul>
 
         {/* Desktop Login Button and profile Avatar dropdown*/}
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center">
           {userData.isAuthenticated ? (
             <Avatar />
           ) : (
             <Link
               to="/login"
-              className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200"
+              className="bg-[#D8F3DC] text-primary px-4 py-2 rounded-xl font-semibold hover:bg-white transition-all duration-200 flex items-center gap-1"
             >
-              Login
+              <LogIn /> Login
             </Link>
           )}
         </div>
@@ -122,18 +135,28 @@ function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="text-3xl self-end cursor-pointer"
           />
-          <ul className="flex flex-col gap-6 mt-6 text-lg font-medium">
+          <ul className="flex flex-col text-xl gap-10 mt-6 font-medium">
             {/* home */}
             <li>
-              <Link to="/" smooth onClick={() => setMenuOpen(false)}>
-                Home
+              <Link
+                to="/"
+                smooth
+                className="flex items-center gap-2"
+                onClick={() => setMenuOpen(false)}
+              >
+                <House /> Home
               </Link>
             </li>
 
             {/* about  */}
             <li>
-              <Link to="/#about" smooth onClick={() => setMenuOpen(false)}>
-                About
+              <Link
+                to="/#about"
+                className="flex items-center gap-2"
+                smooth
+                onClick={() => setMenuOpen(false)}
+              >
+                <Info /> About
               </Link>
             </li>
 
@@ -142,39 +165,46 @@ function Navbar() {
               <Link
                 to="/#how-it-works"
                 smooth
+                className="flex items-center gap-2"
                 onClick={() => setMenuOpen(false)}
               >
-                How It Works
+                <Cog /> How It Works
               </Link>
             </li>
 
-            {userData?.user?.role === "farmer" && (
-              <li>
-                <Link to="/add-product" onClick={() => setMenuOpen(false)}>
-                  Add Products
-                </Link>
-              </li>
-            )}
+            {/* View Products */}
             <li>
-              <Link to="/products" onClick={() => setMenuOpen(false)}>
-                View Products
+              <Link
+                to="/products"
+                className="flex items-center gap-2"
+                smooth
+                onClick={() => setMenuOpen(false)}
+              >
+                <PackageSearch /> View Products
               </Link>
             </li>
 
+            {/* contact */}
             <li>
-              <Link to="/#contact" smooth onClick={() => setMenuOpen(false)}>
-                Contact
+              <Link
+                to="/#contact"
+                className="flex items-center gap-2"
+                smooth
+                onClick={() => setMenuOpen(false)}
+              >
+                <Mail /> Contact
               </Link>
             </li>
 
+            {/* login button */}
             {!userData.isAuthenticated && (
               <li>
                 <Link
                   to="/login"
-                  className="text-center bg-[#2D6A4F] text-white px-4 py-2 rounded-lg"
+                  className="flex items-center gap-2 text-center bg-[#2D6A4F] text-white px-4 py-2 rounded-lg"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Login
+                  <LogIn /> Login
                 </Link>
               </li>
             )}

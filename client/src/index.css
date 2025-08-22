@@ -6,13 +6,28 @@
 @source "../node_modules/@my-company/ui-lib";
 
 @theme {
-  --color-primary: #2D6A4F;
+  --color-primary: #2d6a4f;
   --breakpoint-xs: 360px;
   --breakpoint-xss: 320px;
-   --breakpoint-mds: 760px;
+  --breakpoint-mds: 760px;
 }
 @layer base {
   body {
-    @apply bg-[#FFFBEE];
+    @apply bg-[#FFFBEE] flex flex-col h-screen;
   }
+}
+
+/* Increase horizontal scrollbar height */
+.custom-scroll::-webkit-scrollbar {
+  height: 12px; /* Default is 6px or less */
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #a0aec0;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
 }

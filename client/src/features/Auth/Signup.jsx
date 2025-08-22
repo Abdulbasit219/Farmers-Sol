@@ -150,7 +150,7 @@ function Signup() {
 
         {/* submit button */}
         <Button
-          className="w-full cursor-pointer bg-primary hover:bg-white hover:border hover:border-primary text-white hover:text-primary transition duration-200"
+          className="w-full cursor-pointer px-6 py-3 bg-primary hover:bg-white hover:border hover:border-primary text-white hover:text-primary transition duration-200"
           type="submit"
         >
           {isLoading ? "Signing up ..." : "Sign Up"}
