@@ -43,7 +43,7 @@ function Navbar() {
   }, [menuOpen]);
 
   return (
-    <div className="sticky top-0 rounded-b-4xl bg-[#2D6A4F] w-full shadow-md z-50">
+    <div className="sticky top-0 bg-[#2D6A4F] w-full shadow-md z-50">
       {/* for desktop */}
       <div className="mx-auto px-4 h-25 flex items-center justify-around">
         {/* Logo */}

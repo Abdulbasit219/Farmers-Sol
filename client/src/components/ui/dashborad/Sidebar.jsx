@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, X } from "lucide-react";
 
 function Sidebar({ menuItems }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +42,7 @@ function Sidebar({ menuItems }) {
                 onClick={() => setIsOpen(false)}
                 className="flex justify-end w-full p-2 text-white rounded-lg"
               >
-                <LogOut className="text-3xl" />
+                <X size={30} />
               </button>
             </li>
 
