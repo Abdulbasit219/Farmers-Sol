@@ -8,7 +8,9 @@ import {
   getProductsbyFarmerId,
   getProductsByCategory,
   approvedProducts,
-  getProductById
+  getProductById,
+  searchProduct,
+  filterProducts,
 } from "../controller/Products.js";
 import cloudinaryfileUpload from "../middleware/FileUploader.js";
 import checkIsAdmin from "../middleware/CheckAdmin.js";
@@ -26,11 +28,18 @@ router.post(
 
 router.delete("/delete-product/:id", ensureAuthenticated, deleteProducts);
 
-router.get("/get-productById/:id", ensureAuthenticated, getProductById)
+// for sigle product id
+router.get("/get-productById/:id", ensureAuthenticated, getProductById);
 
 //pending images updation
-router.patch("/update-product/:id", ensureAuthenticated, updateProduct);
+router.patch(
+  "/update-product/:id",
+  cloudinaryfileUpload.array("imageUrl", 5),
+  ensureAuthenticated,
+  updateProduct
+);
 
+// for farmer id
 router.get("/get-products/:id", ensureAuthenticated, getProductsbyFarmerId);
 
 router.get(
@@ -46,5 +55,9 @@ router.patch(
   checkIsAdmin,
   approvedProducts
 );
+
+router.post("/search", ensureAuthenticated, searchProduct);
+
+router.get("/filter", ensureAuthenticated, filterProducts);
 
 export default router;

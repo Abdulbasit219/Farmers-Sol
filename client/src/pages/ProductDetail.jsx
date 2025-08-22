@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   useGetCategoryByIdQuery,
   useGetProductByCategoryQuery,
@@ -7,19 +7,28 @@ import {
 } from "../redux/ApiSlice";
 import LoadingOverlay from "../components/ui/loading/LoadingOverlay";
 import Button from "../components/ui/Button";
+import OrderModal from "../components/ui/modal/OrderModal";
+import { handleError } from "../Utils";
+import { useSelector } from "react-redux";
 
 const ProductDetail = () => {
   const [mainImage, setMainImage] = useState();
   const [thumbnails, setThumbnails] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { id } = useParams();
   const { data, isLoading } = useGetProductsByIdQuery(id);
   const product = data?.products[0];
 
+  const navigate = useNavigate();
+
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+
   const { data: categoryData, isLoading: categoryLoading } =
-    useGetProductByCategoryQuery(product?.category, {
-      skip: !product?.category,
-    });
+    useGetProductByCategoryQuery(
+      { catId: product?.category },
+      { skip: !product?.category }
+    );
 
   const { data: catName, isLoading: catLoading } = useGetCategoryByIdQuery(
     product?.category,
@@ -45,7 +54,18 @@ const ProductDetail = () => {
       ? [...similarProducts].sort(() => 0.5 - Math.random()).slice(0, 4)
       : similarProducts;
 
-      console.log(product?.category)
+  const handleModal = () => {
+    if (!isAuthenticated) {
+      handleError("Please log in to place an order");
+      return navigate("/login", { state: { from: `/products-details/${id}` } });
+    }
+
+    if (product.quantity === 0) {
+      return handleError("The product is out of stock");
+    } else {
+      setIsModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     if (product?.imageUrl?.length > 0) {
@@ -59,7 +79,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="bg-gray-100">
+    <div className="[#FFFBEE]">
       <div className="container mx-auto px-4 pt-8 pb-4">
         <div className="flex flex-wrap -mx-4">
           {/* Product Images */}
@@ -99,12 +119,21 @@ const ProductDetail = () => {
 
             {/* quantity */}
             <div className="mb-6 flex justify-between">
-              <label
-                htmlFor="quantity"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Quantity: {product.quantity} {product.unit}
-              </label>
+              {product.quantity === 0 ? (
+                <label
+                  htmlFor="quantity"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Out of Stock
+                </label>
+              ) : (
+                <label
+                  htmlFor="quantity"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Quantity: {product.quantity} {product.unit}
+                </label>
+              )}
               <label
                 htmlFor="quantity"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -115,32 +144,51 @@ const ProductDetail = () => {
 
             {/* order button */}
             <div className="flex space-x-4 mb-6">
-              <Button className="bg-primary border border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200 cursor-pointer">
-                Order Now
-              </Button>
+              {user?._id !== product?.createdBy ? (
+                <Button
+                  className="bg-primary border px-6 py-3 border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200 cursor-pointer"
+                  onClick={handleModal}
+                >
+                  Order Now
+                </Button>
+              ) : (
+                <p className="text-primary text-xl font-semibold">
+                  This is your Product.
+                </p>
+              )}
             </div>
 
             {similarProducts.length > 0 && (
-              <div className="w-full text-xl font-semibold">
+              <div className=" w-full text-xl font-semibold">
                 <p className="text-2xl font-semibold mr-2">Similar Products:</p>
-                {displaySimilarProducts.map((item, i) => (
-                  <Link
-                    to={`/products-details/${item._id}`}
-                    key={i}
-                    className="rounded-lg shadow p-3 hover:shadow-md transition duration-200"
-                  >
-                    <img
-                      src={item.imageUrl[0]}
-                      alt={item.title}
-                      className="h-24 object-cover rounded-md mb-2 opacity-80 hover:opacity-100 transition duration-300"
-                    />
-                  </Link>
-                ))}
+                <div className="flex">
+                  {displaySimilarProducts.map((item, i) => (
+                    <Link
+                      to={`/products-details/${item._id}`}
+                      key={i}
+                      className="rounded-lg  p-3 hover:shadow transition duration-200"
+                    >
+                      <img
+                        src={item.imageUrl[0]}
+                        alt={item.title}
+                        className="h-24 object-cover rounded-md mb-2 opacity-80 hover:opacity-100 transition duration-300"
+                      />
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <OrderModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          product={product}
+        />
+      )}
     </div>
   );
 };

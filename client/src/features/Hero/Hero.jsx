@@ -2,8 +2,21 @@ import FarmerBuyer from "../../assets/hero-img.png";
 import bgHero from "../../assets/bgHero.png";
 import Button from "../../components/ui/Button";
 import { HashLink as Link } from "react-router-hash-link";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Hero() {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      navigate("/products");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="max-h-[850px] lg:max-h-[545px] sm:max-h-[850px] xs:max-h-[660px] xss:max-h-[630px] mx-auto overflow-hidden">
       <div
@@ -21,13 +34,13 @@ function Hero() {
           </p>
 
           <div className="flex flex-col xs:flex-row gap-4">
-            <Link to="/login">
-              <Button className="bg-[#D8F3DC] text-[#2D6A4F] hover:bg-white hover:cursor-pointer">
+            <Link smooth onClick={handleGetStarted}>
+              <Button className="bg-[#E4F8E2] px-6 py-3 hover:bg-[#daf3d7] text-[#2D6A4F] hover:cursor-pointer">
                 Get Started
               </Button>
             </Link>
             <Link smooth to="/#about">
-              <Button className="border border-white text-white hover:bg-white hover:text-[#2D6A4F] hover:cursor-pointer">
+              <Button className="border border-white px-6 py-3 text-white hover:bg-white hover:text-[#2D6A4F] hover:cursor-pointer">
                 Learn More
               </Button>
             </Link>

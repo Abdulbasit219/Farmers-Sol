@@ -3,27 +3,49 @@ import productSchema from "../models/ProductSchema.js";
 
 const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    let { name } = req.body;
+
+    name = name.trim().toLowerCase();
 
     if (!name)
-      return res.status(400).json({ message: "Category name is required" });
+      return res
+        .status(400)
+        .send({ success: false, message: "Category name is required" });
 
-    const existingsCategory = await categoryModel.findOne({ name });
+    const existingsCategory = await categoryModel.findOne({
+      name: { $regex: new RegExp(`^${name}$`, "i") },
+    });
+
     if (existingsCategory)
-      return res.status(400).json({ message: "Category already exists" });
+      return res
+        .status(400)
+        .send({ success: false, message: "Category already exists" });
 
     const newCategory = new categoryModel({ name });
     await newCategory.save();
 
-    res.status(201).json({ success: true, category: newCategory });
+    res.status(201).send({
+      success: true,
+      message: "Category Created Successfully",
+      category: newCategory,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).send({ success: false, message: "Server Error" });
   }
 };
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await categoryModel.find();
+    const { query } = req.query;
+
+    const filter = {};
+    if (query && query.trim() !== "") {
+      filter = {
+        $or: [{ name: { $regex: `^\\b${query}\\b`, $options: "i" } }],
+      };
+    }
+
+    const categories = await categoryModel.find(filter);
     if (!categories) {
       return res.status(404).send({
         success: false,
@@ -42,7 +64,9 @@ const updateCategory = async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ message: "New category name is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "New category name is required" });
     }
 
     const updateCategory = await categoryModel.findByIdAndUpdate(
@@ -52,7 +76,9 @@ const updateCategory = async (req, res) => {
     );
 
     if (!updateCategory) {
-      return res.status(404).json({ message: "Category not found" });
+      return res
+        .status(404)
+        .json({ success: true, message: "Category not found" });
     }
 
     res.status(200).json({
@@ -75,7 +101,9 @@ const deleteCategory = async (req, res) => {
 
     const category = await categoryModel.findById(categoryId);
     if (!category) {
-      return res.status(404).json({ message: "Category not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
     }
 
     await productSchema.deleteMany({ category: categoryId });
@@ -121,4 +149,10 @@ const getCategoryById = async (req, res) => {
   }
 };
 
-export { createCategory, getAllCategories, updateCategory, deleteCategory, getCategoryById };
+export {
+  createCategory,
+  getAllCategories,
+  updateCategory,
+  deleteCategory,
+  getCategoryById,
+};

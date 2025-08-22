@@ -6,6 +6,7 @@ import routes from "./routes/AuthRoute.js";
 import ProductsRoute from "./routes/ProductRoute.js";
 import cookieParser from "cookie-parser";
 import CategoryRoute from "./routes/CategoryRoutes.js";
+import OrderRoute from "./routes/OrderRoute.js";
 
 const app = express();
 
@@ -14,8 +15,8 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://farmers-sol.vercel.app", 
-    credentials: true,
+    origin: "http://localhost:5173", // Frontend URL
+    credentials: true, // Allow cookies
   })
 );
 
@@ -27,6 +28,7 @@ const port = process.env.PORT;
 app.use("/auth", routes);
 app.use("/products", ProductsRoute);
 app.use("/category", CategoryRoute);
+app.use("/order", OrderRoute);
 
 app.listen(port, () => {
   console.log(`APP listening on port ${port}`);

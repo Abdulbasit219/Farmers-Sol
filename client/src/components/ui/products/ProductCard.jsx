@@ -35,9 +35,13 @@ const ProductCard = ({
       <hr className="card-divider" />
 
       <div className="card-footer">
-        <div className="card-price">
-          {quantity} <span>{unit}</span>
-        </div>
+        {quantity === 0 ? (
+          <div className="card-price">Out of Stock</div>
+        ) : (
+          <div className="card-price">
+            {quantity} <span>{unit}</span>
+          </div>
+        )}
         <Button
           onClick={() => navigate(`/products-details/${productId}`)}
           className="h-[35px] w-28 text-[10px] flex items-center justify-center cursor-pointer bg-primary border border-transparent hover:bg-white hover:border-primary text-white hover:text-primary transition duration-200"

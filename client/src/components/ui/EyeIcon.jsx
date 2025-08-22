@@ -1,5 +1,4 @@
-import React from "react";
-import { FaEyeSlash, FaEye } from "react-icons/fa6";
+import { Eye, EyeOff } from "lucide-react";
 
 function EyeIcon({ visible, toggle }) {
   return (
@@ -7,7 +6,7 @@ function EyeIcon({ visible, toggle }) {
       onClick={toggle}
       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer text-lg"
     >
-      {visible ? <FaEyeSlash /> : <FaEye />}
+      {visible ? <EyeOff /> : <Eye />}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { comparePassword, hashedPassword } from "../helper/bcrypt_helper.js";
 import userModel from "../models/AuthSchema.js";
 import JWT from "jsonwebtoken";
+import productModel from "../models/ProductSchema.js";
 
 const registerationController = async (req, res) => {
   try {
@@ -11,9 +12,10 @@ const registerationController = async (req, res) => {
       return res.send({ message: "All fields are required" });
     }
 
-    if (password.length <= 8) {
+    if (password.length < 8) {
       return res.send({
-        message: "password must be atleast 8 charachter long",
+        message:
+          "password must be atleast 8 charachter long including Special Charachter",
       });
     }
 
@@ -86,11 +88,10 @@ const loginController = async (req, res) => {
     });
 
     const { password: _, ...rest } = user._doc;
-    
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None", // ✅ REQUIRED when using cross-site cookies
+      secure: process.env.NODE_ENV === "production", // Ensures HTTPS in production
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -121,7 +122,19 @@ const checkAuth = (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await userModel.find();
+    const { query } = req.query;
+
+    let filter = { _id: { $ne: req.user._id } };
+
+    if (query) {
+      filter.$or = [
+        { name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+      ];
+    }
+
+    const users = await userModel.find(filter).select("-password");
+
     if (!users) {
       return res.status(404).send({
         success: false,
@@ -132,7 +145,7 @@ const getUsers = async (req, res) => {
       success: true,
       message: "User found Successfully",
       users,
-      totalUsers: users.length,
+      totalUsers: users.length + 1, //including me in length 
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -171,6 +184,11 @@ const updateUser = async (req, res) => {
     // password hashing (updated)
     let updatedPassword = user.password;
     if (password) {
+      if (password.length < 8) {
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 8 characters long." });
+      }
       updatedPassword = await hashedPassword(password);
     }
 
@@ -194,10 +212,40 @@ const updateUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User Not found",
+      });
+    }
+
+    await productModel.deleteMany({ createdBy: id });
+
+    await userModel.findByIdAndDelete(id);
+
+    res.status(200).send({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.log("Error deleting user:", error);
+    res.status(500).send({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 export {
   loginController,
   registerationController,
   checkAuth,
   getUsers,
   updateUser,
+  deleteUser,
 };
