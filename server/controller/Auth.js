@@ -89,9 +89,10 @@ const loginController = async (req, res) => {
 
     const { password: _, ...rest } = user._doc;
 
-    res.cookie("token", token, {
+    res.cookie("token", jwtToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensures HTTPS in production
+      secure: true, // false for local dev without https
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -145,7 +146,7 @@ const getUsers = async (req, res) => {
       success: true,
       message: "User found Successfully",
       users,
-      totalUsers: users.length + 1, //including me in length 
+      totalUsers: users.length + 1, //including me in length
     });
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
