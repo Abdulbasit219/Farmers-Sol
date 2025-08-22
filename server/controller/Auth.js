@@ -89,7 +89,7 @@ const loginController = async (req, res) => {
 
     const { password: _, ...rest } = user._doc;
 
-    res.cookie("token", jwtToken, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: true, // false for local dev without https
       sameSite: "none",
