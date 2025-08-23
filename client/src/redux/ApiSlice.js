@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ApiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://farmers-sol-1.onrender.com",
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
     credentials: "include",
   }),
   endpoints: (builder) => ({
