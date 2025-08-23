@@ -15,7 +15,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: process.env.URL, // Frontend URL
+    origin: "http://localhost:5173", // Frontend URL
     credentials: true, // Allow cookies
   })
 );
