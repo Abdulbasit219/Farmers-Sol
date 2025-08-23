@@ -93,6 +93,7 @@ const loginController = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
+      domain: ".vercel.app",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
