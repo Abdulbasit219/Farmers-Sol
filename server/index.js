@@ -15,8 +15,8 @@ connectDB();
 
 app.use(
   cors({
-    origin: process.env.URL, // Frontend URL
-    credentials: true, // Allow cookies
+    origin: "https://farmers-sol.vercel.app", // frontend URL
+    credentials: true, // allow cookies
   })
 );
 
