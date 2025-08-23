@@ -29,7 +29,7 @@ router.post(
 router.delete("/delete-product/:id", ensureAuthenticated, deleteProducts);
 
 // for sigle product id
-router.get("/get-productById/:id", ensureAuthenticated, getProductById);
+router.get("/get-productById/:id", getProductById);
 
 //pending images updation
 router.patch(
@@ -56,8 +56,8 @@ router.patch(
   approvedProducts
 );
 
-router.post("/search", ensureAuthenticated, searchProduct);
+router.post("/search", searchProduct);
 
-router.get("/filter", ensureAuthenticated, filterProducts);
+router.get("/filter", filterProducts);
 
 export default router;
