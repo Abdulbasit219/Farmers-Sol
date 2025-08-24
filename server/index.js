@@ -7,19 +7,15 @@ import ProductsRoute from "./routes/ProductRoute.js";
 import cookieParser from "cookie-parser";
 import CategoryRoute from "./routes/CategoryRoutes.js";
 import OrderRoute from "./routes/OrderRoute.js";
-import path from "path";
 
 const app = express();
 
 dotenv.config();
-
-const __dirname = path.resolve();
-
 connectDB();
 
 app.use(
   cors({
-    origin: process.env.URL, // frontend URL
+    origin: "http://localhost:5173", // frontend URL
     credentials: true, // allow cookies
   })
 );
@@ -33,14 +29,6 @@ app.use("/auth", routes);
 app.use("/products", ProductsRoute);
 app.use("/category", CategoryRoute);
 app.use("/order", OrderRoute);
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
-  });
-}
 
 app.listen(port, () => {
   console.log(`APP listening on port ${port}`);
