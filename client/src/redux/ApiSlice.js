@@ -186,7 +186,7 @@ export const ApiSlice = createApi({
     deleteOrder: builder.mutation({
       query: (id) => ({
         url: `/order/deleteOrder/${id}`,
-        method: "Delete",
+        method: "DELETE",
       }),
     }),
   }),
